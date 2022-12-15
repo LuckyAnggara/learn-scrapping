@@ -6,7 +6,7 @@ async function getLastUpdate() {
   const data = []
   const url = 'https://mangakyo.id/'
 
-  const browser = await puppeteer.launch({ headless: true })
+  const browser = await puppeteer.launch()
   const page = await browser.newPage()
   await page.setRequestInterception(true)
 

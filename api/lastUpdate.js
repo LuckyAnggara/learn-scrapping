@@ -73,6 +73,7 @@ async function getLastUpdate() {
   const page = await context.newPage()
 
   await page.goto(url, { waitUntil: 'domcontentloaded' })
+  return page
 
   const mangas = await page.$$('.bs.styletere.stylefiv div.bsx')
   for (const manga of mangas) {
@@ -99,6 +100,9 @@ async function getLastUpdate() {
     )
   }
 
+  await context.close()
+  await browser.close()
+
   return data
 }
 
@@ -110,7 +114,6 @@ router.get('/', async (req, res) => {
       result: data,
     })
   } catch (error) {
-    console.log(error)
     return res.status(500).json(error)
   }
 })

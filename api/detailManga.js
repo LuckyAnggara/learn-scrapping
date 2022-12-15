@@ -20,9 +20,7 @@ async function detail(link) {
         const detailRilis = []
 
         //DETAIL RILIS
-        $('.infotable tr').each((a, b) => {
-          detailRilis.push($(b).innerHtml)
-        })
+        $('.infotable tr').each((a, b) => {})
 
         const desc = $('.entry-content').find('p').text()
         const title = $('.entry-title').text()

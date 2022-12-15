@@ -6,9 +6,7 @@ async function getLastUpdate() {
   const data = []
   const url = 'https://mangakyo.id/'
 
-  const browser = await puppeteer.launch({
-    headless: 'chrome',
-  })
+  const browser = await puppeteer.launch({})
   const page = await browser.newPage()
   await page.setRequestInterception(true)
 
@@ -22,7 +20,7 @@ async function getLastUpdate() {
     }
   })
 
-  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
+  // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   const mangas = await page.$$('.bs.styletere.stylefiv div.bsx')
   for (const manga of mangas) {
@@ -61,8 +59,8 @@ router.get('/', async (req, res) => {
       result: data,
     })
   } catch (error) {
-    console.info(error)
-    return res.status(500).send(error)
+    console.log(error)
+    return res.status(500).json(error)
   }
 })
 

@@ -8,7 +8,7 @@ const port = process.env.port || 3001
 
 const app = express()
 
-app.use('/api/last-update', lastUpdate)
+app.use('/api/last-update/', lastUpdate)
 app.use('/api/detail-manga/', detailManga)
 app.use('/api/search-manga/', searchManga)
 app.use('/api/read-manga/', readManga)

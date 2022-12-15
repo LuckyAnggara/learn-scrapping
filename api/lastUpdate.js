@@ -1,12 +1,17 @@
 const express = require('express')
-const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer-core')
 const router = express.Router()
+const chrome = require('chrome-aws-lambda')
 
 async function getLastUpdate() {
   const data = []
   const url = 'https://mangakyo.id/'
 
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    args: chrome.args,
+    executablePath: await chrome.executablePath,
+    headless: chrome.headless,
+  })
   const page = await browser.newPage()
   await page.setRequestInterception(true)
 

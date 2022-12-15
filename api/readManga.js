@@ -23,7 +23,6 @@ async function read(link) {
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   await page.waitForSelector('.ts-main-image').then(() => console.log('loaded'))
-  await page.screenshot({ path: 'screenshot.jpg' })
   let chapterImage = []
   const images = await page.$$('.ts-main-image')
   for (const image of images) {

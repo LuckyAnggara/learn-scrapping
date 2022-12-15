@@ -22,7 +22,6 @@ async function getLastUpdate() {
 
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
   await page.goto(url, { waitUntil: 'domcontentloaded' })
-  await page.screenshot({ path: 'screenshot.png' })
   const mangas = await page.$$('.bs.styletere.stylefiv div.bsx')
   for (const manga of mangas) {
     data.push(

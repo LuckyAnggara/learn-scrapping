@@ -1,18 +1,17 @@
 const express = require('express')
 const puppeteer = require('puppeteer')
 const router = express.Router()
-const chromium = require('chrome-aws-lambda')
+const chrome = require('chrome-aws-lambda')
 
 async function getLastUpdate() {
   const data = []
   const url = 'https://mangakyo.id/'
 
+  return url
+
   const browser = await puppeteer.launch({
-    args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
+    args: chrome.args,
     headless: true,
-    ignoreHTTPSErrors: true,
   })
   const page = await browser.newPage()
   await page.setRequestInterception(true)
@@ -54,7 +53,6 @@ async function getLastUpdate() {
     )
   }
 
-  browser.close()
   return data
 }
 

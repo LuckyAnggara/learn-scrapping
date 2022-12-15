@@ -230,7 +230,7 @@ async function read(link) {
   return data
 }
 
-app.get('/', async (req, res) => {
+app.get('api/get-last-update/', async (req, res) => {
   try {
     const data = await getLastUpdate()
     return res.status(200).json({
@@ -256,7 +256,7 @@ app.get('/:name', async (req, res) => {
   }
 })
 
-app.get('/detail/:link', async (req, res) => {
+app.get('api/detail/:link', async (req, res) => {
   try {
     const data = await detail(req.params.link)
     return res.status(200).json({
@@ -269,7 +269,7 @@ app.get('/detail/:link', async (req, res) => {
   }
 })
 
-app.get('/read/:link', async (req, res) => {
+app.get('api/read/:link', async (req, res) => {
   try {
     const data = await read(req.params.link)
     return res.status(200).json({

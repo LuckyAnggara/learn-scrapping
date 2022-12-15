@@ -61,7 +61,7 @@ router.get('/', async (req, res) => {
       result: data,
     })
   } catch (error) {
-    console.error(error)
+    console.info(error)
     return res.status(500).send(error)
   }
 })

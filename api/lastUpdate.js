@@ -1,12 +1,19 @@
 const express = require('express')
 const puppeteer = require('puppeteer')
 const router = express.Router()
+const chromium = require('chrome-aws-lambda')
 
 async function getLastUpdate() {
   const data = []
   const url = 'https://mangakyo.id/'
 
-  const browser = await puppeteer.launch({})
+  const browser = await puppeteer.launch({
+    args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: true,
+    ignoreHTTPSErrors: true,
+  })
   const page = await browser.newPage()
   await page.setRequestInterception(true)
 
@@ -20,7 +27,7 @@ async function getLastUpdate() {
     }
   })
 
-  // await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36')
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   const mangas = await page.$$('.bs.styletere.stylefiv div.bsx')
   for (const manga of mangas) {

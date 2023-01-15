@@ -2,31 +2,32 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const express = require('express')
 const router = express.Router()
-const { url } = require('../const')
 
 async function search(name) {
   const data = []
   const no = 1
+  const url = `https://mangakyo.id/?s=${name}`
 
   try {
     await axios
-      .get(`${url}?s=${name}`, {
+      .get(url, {
         headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
       })
       .then((response) => {
         const html_data = response.data
         const $ = cheerio.load(html_data)
-        const selectedElement = '.animposx'
+        const selectedElement = '.bsx'
         $(selectedElement).each((index, el) => {
-          const img = $(el).find('img').attr('src')
+          const body = $(el).find('a')
+          const lastChapter = $(el).find('.epxs').text()
+          const img = $(el).find('img').attr('src').replace('?resize=165,225', '')
+
           data.push({
             no: index + no,
-            title: $(el).find('.tt').find('h4').text(),
-            href: $(el)
-              .find('a')
-              .attr('href')
-              .replace('https://komikcast.net/komik', ''),
-            img: img.replace('?resize=165,225', ''),
+            title: body.attr('title'),
+            href: body.attr('href').replace('https://mangakyo.id/komik', ''),
+            img: img,
+            lastChapter: lastChapter,
           })
         })
       })

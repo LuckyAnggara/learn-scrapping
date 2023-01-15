@@ -2,56 +2,59 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 const express = require('express')
 const router = express.Router()
+const { url } = require('../const')
 
 async function detail(link) {
   const data = {}
-  const url = `https://mangakyo.id/=${link}/`
   try {
     await axios
-      .get(url, {
+      .get(`${url}komik/${link}/`, {
         headers: { 'Accept-Encoding': 'gzip,deflate,compress' },
       })
       .then((response) => {
         const html_data = response.data
         const $ = cheerio.load(html_data)
 
-        const img = $('.thumb').find('img').attr('src')
-        const rating = $('.num').text()
-        const detailRilis = []
+        const img = $('.thumb img').attr('src').replace('?resize=214,315', '')
+        const rating = $('.archiveanime-rating').find('i').text()
+        // const detailRilis = []
 
         //DETAIL RILIS
-        $('.infotable tr').each((a, b) => {})
+        // $('.infotable tr').each((a, b) => {})
 
-        const desc = $('.entry-content').find('p').text()
-        const title = $('.entry-title').text()
-        const titleAlternative = $('.alternative').text()
+        const desc = $('p').text()
+        // const title = $('.entry-title').text()
+        // const titleAlternative = $('.alternative').text()
         //GENRE
-        const genre = []
+        // const genre = []
         const chapter = []
 
         //GENRE
-        $('.seriestugenre a').each((a, b) => {
-          genre.push({ name: $(b).text(), href: $(b).attr('href').replace('https://mangakyo.id/', '') })
-        })
+        // $('.seriestugenre a').each((a, b) => {
+        //   genre.push({
+        //     name: $(b).text(),
+        //     href: $(b).attr('href').replace('https://mangakyo.id/', ''),
+        //   })
+        // })
 
         //CHAPTER
-        $('#chapterlist li').each((a, b) => {
+        $('#chapter_list li').each((a, b) => {
           chapter.push({
-            name: $(b).attr('data-num'),
-            href: $(b).find('a').attr('href').replace('https://mangakyo.id', ''),
+            name: $(b).find('a').find('chapter').text(),
+            href: $(b).find('a').attr('href').replace(url, ''),
           })
         })
         data.detail = {
           img: img,
           rating: rating,
-          detailRilis: detailRilis,
+          // detailRilis: detailRilis,
         }
         data.desc = desc
-        data.title = {
-          original: title.replace('Komik ', ''),
-          alternative: titleAlternative,
-        }
-        data.genre = genre
+        // data.title = {
+        //   original: title.replace('Komik ', ''),
+        //   alternative: titleAlternative,
+        // }
+        // data.genre = genre
         data.chapter = chapter
       })
     return data

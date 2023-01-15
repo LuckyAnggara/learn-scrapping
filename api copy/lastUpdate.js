@@ -2,7 +2,7 @@ const express = require('express')
 const puppeteer = require('puppeteer')
 const router = express.Router()
 // const chromium = require('chrome-aws-lambda')
-// const { chromium } = require('playwright')
+const { chromium } = require('playwright')
 
 // async function getLastUpdate() {
 //   const data = []
@@ -74,6 +74,36 @@ async function getLastUpdate() {
 
   await page.goto(url, { waitUntil: 'domcontentloaded' })
   return page
+
+  const mangas = await page.$$('.bs.styletere.stylefiv div.bsx')
+  for (const manga of mangas) {
+    data.push(
+      await manga.evaluate((node) => {
+        const lastUpdate = []
+        const updates = node.querySelector('.bigor .chfiv').querySelectorAll('li')
+
+        for (const update of updates) {
+          lastUpdate.push({
+            chapter: update.querySelector('a').innerText,
+            time: update.querySelector('span').innerText,
+            href: update.querySelector('a').getAttribute('href'),
+          })
+        }
+
+        return {
+          title: node.querySelector('a').getAttribute('title'),
+          href: node.querySelector('a').getAttribute('href').replace('https://mangakyo.id/komik', ''),
+          image: node.querySelector('a img').getAttribute('src'),
+          lastUpdate: lastUpdate,
+        }
+      })
+    )
+  }
+
+  await context.close()
+  await browser.close()
+
+  return data
 }
 
 router.get('/', async (req, res) => {
